@@ -1,0 +1,23 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Log in to Docker Hub
+      run: echo "${{ secrets.DOCKER_HUB_PASS }}" | docker login -u djangohelpdesk --password-stdin
+
+    - name: Build Docker image
+      run: docker build -t djangohelpdesk/standalone:latest ./standalone
+
+    - name: Push Docker image
+      run: docker push djangohelpdesk/standalone:latest
